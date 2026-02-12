@@ -85,7 +85,7 @@ const Landing: React.FC = () => {
           className="hidden md:flex items-center gap-10 text-sm font-semibold text-slate-500"
         >
           <a href="#features" className="hover:text-emerald-600 transition-colors">Features</a>
-          <a href="#pricing" className="hover:text-emerald-600 transition-colors">Pricing</a>
+          <a href="/expenses" className="...">Expenses</a>
           <a href="#proof" className="hover:text-emerald-600 transition-colors">Stats</a>
         </motion.div>
         
