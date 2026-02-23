@@ -13,6 +13,10 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Tenant, LedgerEntry } from '../types';
+import { paymentService } from '../services/paymentService';
+import { smsService } from '../services/smsService';
+import { pdfService } from '../services/pdfService';
+import { SYSTEM_CONFIG } from '../config/constants';
 import FinancialLedger from '../components/FinancialLedger';
 import ReceiptModal from '../components/ReceiptModal';
 
@@ -120,44 +124,54 @@ const TenantPortal: React.FC = () => {
     if (!paymentAmount || isNaN(Number(paymentAmount))) return;
     setIsProcessingPayment(true);
 
-    if (paymentMethod === 'mpesa') {
-      // STK Push Logic
-      setPaymentStatus('sending_stk');
-      // Simulate API call to M-Pesa Daraja Gateway
-      await new Promise(resolve => setTimeout(resolve, 2000));
+    try {
+      if (paymentMethod === 'mpesa') {
+        // REQUIRES PAYMENT VERIFICATION
+        setPaymentStatus('sending_stk');
+        const stkResult = await paymentService.initiateSTKPush(activeTenant.phone || '', Number(paymentAmount), `ZF-${activeTenant.unit}`);
+        
+        if (stkResult.success) {
+          setPaymentStatus('awaiting_pin');
+          const statusResult = await paymentService.checkPaymentStatus(stkResult.checkoutRequestId!);
+          if (statusResult.status !== 'SUCCESS') throw new Error('Payment failed or timed out');
+        }
+      } else {
+        // REQUIRES PAYMENT VERIFICATION
+        await paymentService.processCardPayment({}, Number(paymentAmount));
+      }
+
+      const amount = Number(paymentAmount);
+      const currentLedger = activeTenant.ledger || ledgerData;
+      const lastBalance = currentLedger.length > 0 ? currentLedger[currentLedger.length - 1].balance : 0;
       
-      setPaymentStatus('awaiting_pin');
-      // Simulate user entering PIN on their phone
-      await new Promise(resolve => setTimeout(resolve, 4000));
-    } else {
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const newEntry: LedgerEntry = {
+        id: `pay-${Date.now()}`,
+        date: new Date().toISOString().split('T')[0],
+        description: `Rent Payment - ${paymentMethod === 'mpesa' ? 'M-Pesa (STK Push)' : 'Card'}`,
+        type: 'CREDIT',
+        amount: amount,
+        balance: lastBalance - amount
+      };
+
+      const updatedTenant = {
+        ...activeTenant,
+        ledger: [...currentLedger, newEntry],
+        status: (lastBalance - amount) <= 0 ? 'Paid' : 'Partial'
+      };
+
+      // TODO: Replace with backend API call
+      // REQUIRES BACKEND API ROUTE
+      setTenants(prev => prev.map(t => t.id === activeTenant.id ? updatedTenant : t));
+      localStorage.setItem('zenflow_tenants', JSON.stringify(tenants.map(t => t.id === activeTenant.id ? updatedTenant : t)));
+      
+      setIsProcessingPayment(false);
+      setPaymentStatus('idle');
+      setSubView('success');
+    } catch (err: any) {
+      setIsProcessingPayment(false);
+      setPaymentStatus('idle');
+      alert(err.message || "Payment process failed. Please try again.");
     }
-
-    const amount = Number(paymentAmount);
-    const currentLedger = activeTenant.ledger || ledgerData;
-    const lastBalance = currentLedger.length > 0 ? currentLedger[currentLedger.length - 1].balance : 0;
-    
-    const newEntry: LedgerEntry = {
-      id: `pay-${Date.now()}`,
-      date: new Date().toISOString().split('T')[0],
-      description: `Rent Payment - ${paymentMethod === 'mpesa' ? 'M-Pesa (STK Push)' : 'Card'}`,
-      type: 'CREDIT',
-      amount: amount,
-      balance: lastBalance - amount
-    };
-
-    const updatedTenant = {
-      ...activeTenant,
-      ledger: [...currentLedger, newEntry],
-      status: (lastBalance - amount) <= 0 ? 'Paid' : 'Partial'
-    };
-
-    setTenants(prev => prev.map(t => t.id === activeTenant.id ? updatedTenant : t));
-    localStorage.setItem('zenflow_tenants', JSON.stringify(tenants.map(t => t.id === activeTenant.id ? updatedTenant : t)));
-    
-    setIsProcessingPayment(false);
-    setPaymentStatus('idle');
-    setSubView('success');
   };
 
   const handleMaintenanceSubmit = (e: React.FormEvent<HTMLFormElement>) => {

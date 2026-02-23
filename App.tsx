@@ -34,94 +34,8 @@ import NotificationDrawer from './components/NotificationDrawer';
 import SupportTicketModal from './components/SupportTicketModal';
 import ScrollToTop from './components/ScrollToTop';
 import { Alert, Notification, Tenant, Lead, MaintenanceTicket, Contractor, Expense, Property, UserRole, ProviderApplication, LedgerEntry } from './types';
-
-const INITIAL_PROPERTIES: Property[] = [
-  {
-    id: 'p1',
-    name: 'Zen Plaza',
-    location: 'Westlands, Nairobi',
-    units: [
-      { id: 'u1', name: 'A1', type: 'Shop', status: 'Occupied', tenantName: 'James Kamau', monthlyRent: 25000, dueDate: 5 },
-      { id: 'u2', name: 'A2', type: 'Shop', status: 'Vacant', monthlyRent: 22000, dueDate: 5 },
-      { id: 'u3', name: 'B1', type: '1BR', status: 'Occupied', tenantName: 'Sarah Hassan', monthlyRent: 30000, dueDate: 5 },
-      { id: 'u4', name: 'B2', type: '1BR', status: 'Vacant', monthlyRent: 28000, dueDate: 5 },
-      { id: 'u5', name: 'B3', type: '1BR', status: 'Vacant', monthlyRent: 28000, dueDate: 5 },
-      { id: 'u6', name: 'C1', type: '2BR', status: 'Occupied', tenantName: 'Moses Otieno', monthlyRent: 45000, dueDate: 5 },
-    ],
-  },
-  {
-    id: 'p2',
-    name: 'Emerald Heights',
-    location: 'Kilimani, Nairobi',
-    units: [
-      { id: 'u7', name: '101', type: 'Bedsitter', status: 'Occupied', tenantName: 'Jane Doe', monthlyRent: 15000, dueDate: 1 },
-      { id: 'u8', name: '102', type: 'Bedsitter', status: 'Vacant', monthlyRent: 15000, dueDate: 1 },
-    ],
-  },
-];
-
-const INITIAL_LEADS: Lead[] = [
-  {
-    id: 'l1',
-    name: 'John Doe',
-    phone: '254700111222',
-    email: 'john.doe@email.com',
-    idNumber: '33221100',
-    interestedProperty: 'Zen Plaza',
-    interestedUnit: 'C2',
-    source: 'Website',
-    status: 'Pending Review' as any,
-    unitType: '2BR',
-    unitRent: 45000,
-    createdAt: '2026-02-01T10:00:00Z'
-  },
-  {
-    id: 'l2',
-    name: 'Sarah Wanjiku',
-    phone: '254711222333',
-    email: 'sarah.w@email.com',
-    idNumber: '44556677',
-    interestedProperty: 'Zen Plaza',
-    interestedUnit: 'A5',
-    source: 'Facebook',
-    status: 'Background Check' as any,
-    unitType: 'Shop',
-    unitRent: 25000,
-    createdAt: '2026-02-03T14:30:00Z'
-  },
-  {
-    id: 'l3',
-    name: 'Kevin Otieno',
-    phone: '254722333444',
-    email: 'kevin.o@email.com',
-    idNumber: '88990011',
-    interestedProperty: 'Emerald Heights',
-    interestedUnit: 'B1',
-    source: 'Walk-in',
-    status: 'Ready for Approval' as any,
-    unitType: 'Bedsitter',
-    unitRent: 15000,
-    createdAt: '2026-02-05T09:15:00Z'
-  }
-];
-
-const INITIAL_TENANTS: Tenant[] = [
-  { 
-    id: 't1', 
-    name: 'John Kamau', 
-    email: 'john.k@email.com',
-    idNumber: '33445566',
-    unit: 'A1', 
-    phone: '254712345678', 
-    rentAmount: 25000, 
-    depositHeld: 25000,
-    dueDate: 5, 
-    leaseStart: '2025-01-01',
-    leaseEnd: '2026-01-01',
-    status: 'Paid',
-    payments: []
-  }
-];
+import { INITIAL_PROPERTIES, INITIAL_LEADS, INITIAL_TENANTS, SYSTEM_CONFIG } from './config/constants';
+import { authService } from './services/authService';
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -194,11 +108,13 @@ const App: React.FC = () => {
   });
 
   // ENFORCEMENT LOGIC: Automatic Late Fee Engine
+  // TODO: Move this logic to a backend cron job or serverless function
+  // REPLACE WITH DATABASE QUERY
   useEffect(() => {
-    const SYSTEM_DATE = new Date(2026, 1, 15); // Simulated date for demo logic
+    const SYSTEM_DATE = new Date(SYSTEM_CONFIG.DATE); 
     const automations = JSON.parse(localStorage.getItem('zenflow_automations') || '{}');
-    const LATE_FEE_AMOUNT = automations.lateFeeAmount || 500;
-    const GLOBAL_GRACE = automations.gracePeriod || 2;
+    const LATE_FEE_AMOUNT = automations.lateFeeAmount || SYSTEM_CONFIG.LATE_FEE_DEFAULT;
+    const GLOBAL_GRACE = automations.gracePeriod || SYSTEM_CONFIG.GRACE_PERIOD_DEFAULT;
 
     const updatedTenants = tenants.map(t => {
       const dueDate = t.dueDate || 5;
@@ -272,7 +188,8 @@ const App: React.FC = () => {
     ));
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await authService.logout();
     setIsAuthenticated(false);
     setUserRole(null);
     setIsSidebarOpen(false);
@@ -315,6 +232,7 @@ const App: React.FC = () => {
 
         <div className={`flex-1 flex flex-col overflow-hidden ${isAuthenticated && location.pathname !== '/home' && location.pathname !== '/' ? 'lg:pl-64' : ''}`}>
           <div 
+            id="main-scroll-container"
             ref={scrollContainerRef}
             className="flex-1 flex flex-col overflow-y-auto pt-[73px] scroll-smooth"
           >

@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Mail, Lock, Eye, EyeOff, Loader2, Zap, ShieldAlert, User, Briefcase, Landmark, ChevronRight, ArrowLeft, Wrench } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { UserRole } from '../types';
+import { authService } from '../services/authService';
+import { FOUNDER_CREDENTIALS } from '../config/constants';
 
 interface LoginModalProps {
   mode: 'login' | 'signup';
@@ -34,26 +36,24 @@ const LoginModal: React.FC<LoginModalProps> = ({ mode, onClose, onLoginSuccess }
     setIsLoading(true);
     setError(null);
 
-    setTimeout(() => {
-      const isFounderCreds = email === 'ZenflowFounder@gmail.com' && password === 'Zenflow';
-
-      if (isFounderCreds) {
+    try {
+      // REQUIRES AUTH INTEGRATION
+      const result = await authService.login(email, password);
+      
+      if (result.isFounder) {
         setIsLoading(false);
-        onLoginSuccess(email, false, true, 'FOUNDER');
+        onLoginSuccess(result.email, false, true, 'FOUNDER');
         navigate('/home'); 
         return;
       }
 
-      if (mode === 'login' && !email.includes('@')) {
-        setIsLoading(false);
-        setError("Restricted Access: Invalid Credentials");
-        return;
-      }
-
-      setTempUserEmail(email);
+      setTempUserEmail(result.email);
       setIsLoading(false);
       setStep('role');
-    }, 1200);
+    } catch (err: any) {
+      setIsLoading(false);
+      setError(err.message || "Restricted Access: Invalid Credentials");
+    }
   };
 
   const handleRoleSelection = (role: UserRole) => {

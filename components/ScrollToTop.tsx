@@ -8,8 +8,8 @@ const ScrollToTop: React.FC = () => {
 
   // Show button when page is scrolled down 400px
   const toggleVisibility = (e: any) => {
-    // Check if the event target is the scrollable container or if we're using window scroll
-    const scrollTop = e.target.scrollTop !== undefined ? e.target.scrollTop : window.pageYOffset;
+    const scrollContainer = document.getElementById('main-scroll-container');
+    const scrollTop = scrollContainer ? scrollContainer.scrollTop : window.pageYOffset;
     
     if (scrollTop > 400) {
       setIsVisible(true);
@@ -20,7 +20,7 @@ const ScrollToTop: React.FC = () => {
 
   // Set the top coordinate to 0 and make scrolling smooth
   const scrollToTop = () => {
-    const scrollContainer = document.querySelector('.overflow-y-auto');
+    const scrollContainer = document.getElementById('main-scroll-container');
     if (scrollContainer) {
       scrollContainer.scrollTo({
         top: 0,

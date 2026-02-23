@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { User, CreditCard, Bell, Shield, Smartphone, Zap, CheckCircle2, ExternalLink, Scale, Landmark, Sparkles, ShieldCheck, Mail, Zap as ZapIcon, Building2, Camera, MapPin, Phone, Edit2, AlertCircle, Users as UsersIcon, LayoutPanelLeft, BarChart3, LifeBuoy, Clock, Settings2, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
+import { SUBSCRIPTION_PLANS } from '../config/constants';
 
 interface SettingsProps {
   isFounder: boolean;
@@ -351,15 +352,15 @@ const Settings: React.FC<SettingsProps> = ({ isFounder, isNewUser, userEmail }) 
                       <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-emerald-600 text-white px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-emerald-200 z-20">Most Popular</div>
                       <div className="p-10 bg-white rounded-[3.4rem] h-full flex flex-col">
                         <div className="mb-8">
-                          <h3 className="text-2xl font-black text-slate-900 mb-2">The Pro Digital</h3>
+                          <h3 className="text-2xl font-black text-slate-900 mb-2">{SUBSCRIPTION_PLANS[0].name}</h3>
                           <div className="flex items-baseline gap-1 mb-4">
-                            <span className="text-slate-400 font-bold text-sm">KES</span>
-                            <span className="text-5xl font-black tracking-tighter text-slate-900">3,000</span>
-                            <span className="text-slate-400 font-bold text-sm">/month</span>
+                            <span className="text-slate-400 font-bold text-sm">{SUBSCRIPTION_PLANS[0].currency}</span>
+                            <span className="text-5xl font-black tracking-tighter text-slate-900">{SUBSCRIPTION_PLANS[0].price.toLocaleString()}</span>
+                            <span className="text-slate-400 font-bold text-sm">/{SUBSCRIPTION_PLANS[0].period}</span>
                           </div>
                         </div>
                         <div className="space-y-4 mb-10 flex-1">
-                          {["Up to 20 Property Units", "Native M-Pesa STK Integration", "Automated SMS Billing", "Digital Receipt Vault (KRA)", "AI Financial Intelligence", "Maintenance Portal Access"].map((item, i) => (
+                          {SUBSCRIPTION_PLANS[0].features.map((item, i) => (
                             <div key={i} className="flex items-center gap-3">
                               <div className="w-5 h-5 rounded-full bg-emerald-600 flex items-center justify-center text-white shrink-0 shadow-sm"><CheckCircle2 size={12} strokeWidth={4} /></div>
                               <span className="font-bold text-slate-700 text-sm">{item}</span>

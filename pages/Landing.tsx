@@ -13,6 +13,7 @@ import { motion, Variants, AnimatePresence } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
 import Footer from '../components/Footer';
 import { UserRole, Tenant, MaintenanceTicket, Expense, Property } from '../types';
+import { LANDING_STATS } from '../config/constants';
 
 interface LandingProps {
   setIsLoginOpen: (val: boolean) => void;
@@ -318,11 +319,7 @@ const Landing: React.FC<LandingProps> = ({
       <section id="proof" className="py-24 relative z-10">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
-            {[
-              { icon: HomeIcon, label: "Units Managed", value: "500+", suffix: "" },
-              { icon: Wallet, label: "Total Collected", value: "2M+", prefix: "KES " },
-              { icon: ActivityIcon, label: "Uptime", value: "99.9%", suffix: "" },
-            ].map((stat, i) => (
+            {LANDING_STATS.map((stat, i) => (
               <motion.div 
                 key={i}
                 initial={{ opacity: 0, scale: 0.9 }}

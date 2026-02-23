@@ -12,6 +12,8 @@ import {
   Settings2, Download, Calendar, MessageSquare
 } from 'lucide-react';
 import { Tenant, Property, UserRole, LedgerEntry, Lead } from '../types';
+import { SYSTEM_CONFIG } from '../config/constants';
+import { smsService } from '../services/smsService';
 import TenantProfileModal from '../components/TenantProfileModal';
 import BillingModal from '../components/BillingModal';
 import FinancialLedger from '../components/FinancialLedger';
@@ -78,7 +80,7 @@ const Tenants: React.FC<TenantsProps> = ({
     }
   }, [searchParams]);
 
-  const SYSTEM_DATE = new Date(2026, 1, 15);
+  const SYSTEM_DATE = new Date(SYSTEM_CONFIG.DATE);
 
   const processedTenants = useMemo(() => {
     const data = Array.isArray(tenants) ? tenants : [];
@@ -123,6 +125,9 @@ const Tenants: React.FC<TenantsProps> = ({
     
     const message = `Confirmed. Your account ${accNo}, ${tenant.name || 'Tenant'}, Unit ${tenant.unit || '---'}, has been credited with KES ${amountStr} on ${dateStr} at ${timeStr}. Ref: ${refNo}. Your total balance is KES ${balanceStr}.`;
     
+    // TODO: Replace with backend API call for production
+    // REQUIRES BACKEND API ROUTE
+    smsService.sendSMS(tenant.phone || '', message);
     window.location.href = `sms:${tenant.phone}?body=${encodeURIComponent(message)}`;
   };
 

@@ -92,7 +92,7 @@ const Welcome: React.FC<WelcomeProps> = ({ onGetStarted, onLogin, onDemoClick, i
   ];
 
   return (
-    <div className="h-full w-full overflow-y-auto bg-white selection:bg-emerald-100 selection:text-emerald-900">
+    <div className="w-full bg-white selection:bg-emerald-100 selection:text-emerald-900">
       {/* 1. HERO SECTION */}
       <section className="relative min-h-screen flex flex-col items-center justify-center bg-slate-900 overflow-hidden px-6 text-center">
         <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">

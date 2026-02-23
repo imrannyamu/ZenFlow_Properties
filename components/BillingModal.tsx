@@ -3,6 +3,8 @@ import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Send, Calculator, Droplets, ShieldCheck, Zap } from 'lucide-react';
 import { Tenant } from '../types';
+import { smsService } from '../services/smsService';
+import { MPESA_CONFIG } from '../config/constants';
 
 interface BillingModalProps {
   isOpen: boolean;
@@ -24,7 +26,7 @@ const BillingModal: React.FC<BillingModalProps> = ({ isOpen, tenant, onClose }) 
 
   if (!tenant) return null;
 
-  const handleSendSMS = () => {
+  const handleSendSMS = async () => {
     const now = new Date();
     const monthName = now.toLocaleString('en-KE', { month: 'long' });
     const year = now.getFullYear();
@@ -37,29 +39,25 @@ const BillingModal: React.FC<BillingModalProps> = ({ isOpen, tenant, onClose }) 
     const account = `ZF-${unitSafe}`.toUpperCase();
     const generatedOn = now.toLocaleDateString('en-KE', { day: 'numeric', month: 'long', year: 'numeric' });
 
-    const smsBody = `Zenflow Management
---------------------
-Generated: ${generatedOn}
-Client: ${tenant.name || 'Client'}
-Unit: ${tenant.unit || 'N/A'}
-Acc No: ${account}
-Month: ${monthName} ${year}
+    // REQUIRES ENV VARIABLE (SMS API)
+    const smsBody = smsService.formatBillingSMS({
+      clientName: tenant.name || 'Client',
+      unit: tenant.unit || 'N/A',
+      account: account,
+      month: monthName,
+      year: year,
+      rent: tenant.rentAmount || 0,
+      water: water || 0,
+      service: service || 0,
+      total: total || 0,
+      paybill: MPESA_CONFIG.PAYBILL,
+      dueDate: dueDateStr,
+      generatedOn: generatedOn
+    });
 
-BILL BREAKDOWN:
-- Rent: KES ${(tenant.rentAmount || 0).toLocaleString()}
-- Water: KES ${(water || 0).toLocaleString()}
-- Service: KES ${(service || 0).toLocaleString()}
-
-TOTAL DUE: KES ${(total || 0).toLocaleString()}
-
-PAYMENT DETAILS:
-- Paybill: 4088222
-- Account: ${account}
-- Due Date: ${dueDateStr}
-
-Please pay promptly to avoid late fees.
-Regards, Zenflow.`;
-
+    // TODO: Replace with backend API call for production
+    // REQUIRES BACKEND API ROUTE
+    await smsService.sendSMS(tenant.phone || '', smsBody);
     window.location.href = `sms:${tenant.phone}?body=${encodeURIComponent(smsBody)}`;
   };
 
