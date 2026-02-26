@@ -1,56 +1,64 @@
-
 <!DOCTYPE html>
 <html lang="en" style="scrollbar-gutter: stable; scroll-behavior: smooth; height: 100%; overflow: hidden;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>ZenFlow Properties - Premium Property Management</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <title>ZenFlow Properties | Premium Property Management Software</title>
+    <meta name="description" content="ZenFlow Properties is the all-in-one property management system designed to streamline rent collection, tenant screening, and maintenance tracking for modern property managers.">
+    
+    <link rel="canonical" href="https://zen-flow-properties.vercel.app/" />
+
+    <link rel="icon" type="image/jpeg" href="https://i.pinimg.com/736x/9b/b1/e0/9bb1e0d1b485c46de0c8f79935a5b6eb.jpg" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="ZenFlow Properties | Premium Property Management Software" />
+    <meta property="og:description" content="Streamline your property management operations with ZenFlow. Automated tools for rent, tenants, and maintenance." />
+    <meta property="og:image" content="https://i.pinimg.com/736x/fa/c6/d4/fac6d420eba85e334dc754252c92d1b8.jpg" />
+    <meta property="og:url" content="https://zen-flow-properties.vercel.app/" />
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "ZenFlow Properties",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "description": "A premium property management system for landlords and firms to automate daily operations.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0.00",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-      :root {
-        --bg-slate-50: #f8fafc;
-      }
-      body { 
-        font-family: 'Inter', sans-serif; 
-        background-color: var(--bg-slate-50);
-        overflow: hidden;
-        height: 100%;
-        width: 100%;
-      }
-      #root {
-        height: 100%;
-        background-color: var(--bg-slate-50);
-      }
-      @keyframes draw {
-        to { stroke-dashoffset: 0; }
-      }
-      /* Prevent mobile address bar height jumps from affecting fixed backgrounds */
-      .min-h-screen-fix {
-        min-height: 100vh;
-        min-height: 100dvh;
-      }
+      :root { --bg-slate-50: #f8fafc; }
+      body { font-family: 'Inter', sans-serif; background-color: var(--bg-slate-50); overflow: hidden; height: 100%; width: 100%; }
+      #root { height: 100%; background-color: var(--bg-slate-50); }
     </style>
-<script type="importmap">
-{
-  "imports": {
-    "react/": "https://esm.sh/react@^19.2.4/",
-    "react": "https://esm.sh/react@^19.2.4",
-    "@google/genai": "https://esm.sh/@google/genai@^1.41.0",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "framer-motion": "https://esm.sh/framer-motion@^12.34.0",
-    "lucide-react": "https://esm.sh/lucide-react@^0.564.0",
-    "react-router-dom": "https://esm.sh/react-router-dom@^7.13.0"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
+
+    <script type="importmap">
+    {
+      "imports": {
+        "react/": "https://esm.sh/react@^19.2.4/",
+        "react": "https://esm.sh/react@^19.2.4",
+        "@google/genai": "https://esm.sh/@google/genai@^1.41.0",
+        "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+        "framer-motion": "https://esm.sh/framer-motion@^12.34.0",
+        "lucide-react": "https://esm.sh/lucide-react@^0.564.0",
+        "react-router-dom": "https://esm.sh/react-router-dom@^7.13.0"
+      }
+    }
+    </script>
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased">
     <div id="root"></div>
-    <script type="module" src="./index.tsx"></script>
-<script type="module" src="/index.tsx"></script>
+    <script type="module" src="/index.tsx"></script>
 </body>
 </html>
