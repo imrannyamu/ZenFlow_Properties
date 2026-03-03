@@ -38,6 +38,7 @@ import { INITIAL_PROPERTIES, INITIAL_LEADS, INITIAL_TENANTS, SYSTEM_CONFIG } fro
 import { authService } from './services/authService';
 import LaunchScreen from "./LaunchScreen";
 
+
 const App: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
