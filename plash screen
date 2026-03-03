@@ -1,0 +1,56 @@
+[33md06b648[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Updated PWA app icons with official logo
+[33m79693ea[m Optimized PWA manifest with 192 and 512 icons
+[33mb8068dd[m Add PWA manifest and icons for ZenFlow
+[33mab2fe24[m Add PWA manifest and icons for ZenFlow
+[33mfe5f708[m Add PWA manifest and icons for ZenFlow
+[33m5401ad3[m Added PWA support
+[33m2c271ba[m Added PWA support
+[33m043a2c3[m Update index.html
+[33ma6b58ee[m Add files via upload
+[33mbd672a1[m Create .gitkeep
+[33m3c6b997[m Delete public directory
+[33m718c61d[m Delete public/apple-touch-icon.png
+[33m0e101f4[m Update vercel.json
+[33m145c1cd[m Update index.html
+[33m8dd4c82[m Update vercel.json
+[33m72a93cb[m Update index.html
+[33md047732[m Add files via upload
+[33mf506b06[m Delete public/favicon.ico
+[33mc04dd4b[m Delete public/favicon-32x32.png
+[33m426d3a1[m Delete public/favicon-16x16.png
+[33m9dc9c5a[m Delete public/android-chrome-512x512.png
+[33m5e2e182[m Delete public/android-chrome-192x192.png
+[33mff899e6[m Delete public/apple-touch-icon.png
+[33m85c74ea[m Delete public/site.webmanifest
+[33ma2b6f09[m Update vercel.json
+[33m4e2cffd[m Update index.html
+[33m60806b5[m Update index.html
+[33m386d4c0[m Add files via upload
+[33maf41b0e[m Create .gitkeep
+[33mbd904a6[m Delete public/favicon.png
+[33m599b1a0[m fix: update index.html and add correct favicon for production
+[33mc5c8adf[m Update index.html
+[33m4659c9e[m Delete public/.gitkeep
+[33mf28fb76[m Rename favicon.png.png to favicon.png
+[33m7ffc1ae[m fix: move optimized favicon to public folder
+[33mdbba202[m Update index.html
+[33macdec9f[m Add files via upload
+[33ma9e17d8[m Create .gitkeep
+[33md0657ef[m Delete public
+[33mdebd141[m public
+[33ma94c5d3[m fix: remove overflow lock from html/body to restore scrolling
+[33m7573de1[m fix: resolve Tailwind/PostCSS config issue and update index.html meta tags
+[33m5345c68[m Update index.html
+[33m9b567bd[m Update index.html
+[33mc51bd37[m feat: Integrate SMS service and refine auth logic
+[33md1fcf8e[m feat: Refactor App and Landing components
+[33md807cee[m Update Landing.tsx
+[33mbd941ad[m Update index.html
+[33ma516cc3[m Fix folder structure
+[33m4158c1a[m Rename index.tsx to src/index.tsx
+[33m1a8e57d[m Rename App.tsx to src/App.tsx
+[33m67f3d33[m Create temp.txt
+[33mc105983[m Update index.html
+[33m147e7ec[m Update index.html
+[33m2a2f799[m feat: Initialize ZenFlow Properties project
+[33m2b101d2[m Initial commit

@@ -36,7 +36,7 @@ import ScrollToTop from './components/ScrollToTop';
 import { Alert, Notification, Tenant, Lead, MaintenanceTicket, Contractor, Expense, Property, UserRole, ProviderApplication, LedgerEntry } from './types';
 import { INITIAL_PROPERTIES, INITIAL_LEADS, INITIAL_TENANTS, SYSTEM_CONFIG } from './config/constants';
 import { authService } from './services/authService';
-
+import LaunchScreen from "./LaunchScreen";
 const App: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
