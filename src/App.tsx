@@ -2,41 +2,41 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Routes, Route, useLocation, Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
-import Landing from './pages/Landing';
-import Welcome from './pages/Welcome';
-import Dashboard from './pages/Dashboard';
-import Properties from './pages/Properties';
-import Tenants from './pages/Tenants';
-import Documents from './pages/Documents';
-import Expenses from './pages/Expenses';
-import Maintenance from './pages/Maintenance';
-import Reports from './pages/Reports';
-import Settings from './pages/Settings';
-import TenantPortal from './pages/TenantPortal';
-import Applications from './pages/Applications';
-import PublicApply from './pages/PublicApply';
-import Advertise from './pages/Advertise';
-import PublicListing from './pages/PublicListing';
-import Help from './pages/Help';
-import LeaseAudit from './pages/LeaseAudit';
-import Compliance from './pages/Compliance';
-import JoinNetwork from './pages/JoinNetwork';
-import ProviderPortal from './pages/ProviderPortal';
-import Privacy from './pages/Privacy';
-import Terms from './pages/Terms';
-import NotFound from './pages/NotFound';
-import Sidebar from './components/Sidebar';
-import TrialBanner from './components/TrialBanner';
-import Navbar from './components/Navbar';
-import LoginModal from './components/LoginModal';
-import DemoLeadModal from './components/DemoLeadModal';
-import NotificationDrawer from './components/NotificationDrawer';
-import SupportTicketModal from './components/SupportTicketModal';
-import ScrollToTop from './components/ScrollToTop';
-import { Alert, Notification, Tenant, Lead, MaintenanceTicket, Contractor, Expense, Property, UserRole, ProviderApplication, LedgerEntry } from './types';
-import { INITIAL_PROPERTIES, INITIAL_LEADS, INITIAL_TENANTS, SYSTEM_CONFIG } from './config/constants';
-import { authService } from './services/authService';
-import LaunchScreen from "./LaunchScreen";
+import Landing from '../pages/Landing';
+import Welcome from '../pages/Welcome';
+import Dashboard from '../pages/Dashboard';
+import Properties from '../pages/Properties';
+import Tenants from '../pages/Tenants';
+import Documents from '../pages/Documents';
+import Expenses from '../pages/Expenses';
+import Maintenance from '../pages/Maintenance';
+import Reports from '../pages/Reports';
+import Settings from '../pages/Settings';
+import TenantPortal from '../pages/TenantPortal';
+import Applications from '../pages/Applications';
+import PublicApply from '../pages/PublicApply';
+import Advertise from '../pages/Advertise';
+import PublicListing from '../pages/PublicListing';
+import Help from '../pages/Help';
+import LeaseAudit from '../pages/LeaseAudit';
+import Compliance from '../pages/Compliance';
+import JoinNetwork from '../pages/JoinNetwork';
+import ProviderPortal from '../pages/ProviderPortal';
+import Privacy from '../pages/Privacy';
+import Terms from '../pages/Terms';
+import NotFound from '../pages/NotFound';
+import Sidebar from '../components/Sidebar';
+import TrialBanner from '../components/TrialBanner';
+import Navbar from '../components/Navbar';
+import LoginModal from '../components/LoginModal';
+import DemoLeadModal from '../components/DemoLeadModal';
+import NotificationDrawer from '../components/NotificationDrawer';
+import SupportTicketModal from '../components/SupportTicketModal';
+import ScrollToTop from '../components/ScrollToTop';
+import { Alert, Notification, Tenant, Lead, MaintenanceTicket, Contractor, Expense, Property, UserRole, ProviderApplication, LedgerEntry } from '../types';
+import { INITIAL_PROPERTIES, INITIAL_LEADS, INITIAL_TENANTS, SYSTEM_CONFIG } from '../config/constants';
+import { authService } from '../services/authService';
+import LaunchScreen from "../LaunchScreen";
 const App: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -55,6 +55,16 @@ const App: React.FC = () => {
   const [lastContext, setLastContext] = useState<{ name?: string, ref?: string } | undefined>();
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [showSplash, setShowSplash] = useState(true);
+  useEffect(() => {
+  const timer = setTimeout(() => {
+    setShowSplash(false);
+  }, 2000);
+
+  return () => clearTimeout(timer);
+}, []);
+  
+
 
   useEffect(() => {
     if (scrollContainerRef.current) {
@@ -106,6 +116,13 @@ const App: React.FC = () => {
     const saved = localStorage.getItem('zenflow_alerts');
     return saved ? JSON.parse(saved) : [{ id: 1, message: "System ready.", type: "maintenance", severity: "low", isResolved: false }];
   });
+  useEffect(() => {
+  const timer = setTimeout(() => {
+    setShowSplash(false);
+  }, 2000);
+
+  return () => clearTimeout(timer);
+}, []);
 
   // ENFORCEMENT LOGIC: Automatic Late Fee Engine
   // TODO: Move this logic to a backend cron job or serverless function
@@ -138,9 +155,11 @@ const App: React.FC = () => {
             type: 'DEBIT',
             amount: LATE_FEE_AMOUNT,
             balance: lastBalance + LATE_FEE_AMOUNT
+          
           };
           
           return {
+            
             ...t,
             ledger: [...ledger, newEntry],
             status: 'Late'
@@ -203,6 +222,9 @@ const App: React.FC = () => {
   };
 
   const showNavbar = location.pathname === '/' || location.pathname === '/home' || isAuthenticated;
+  if (showSplash) {
+  return <LaunchScreen />;
+}
 
   return (
     <div className="h-screen w-full bg-slate-50 flex flex-col overflow-hidden">
